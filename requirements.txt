@@ -8,3 +8,4 @@ mcp[cli]>=1.23.0
 python-dotenv>=1.0.0
 
 requests
+python-dotenv
