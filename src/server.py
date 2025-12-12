@@ -1,13 +1,12 @@
 import os
 import uvicorn
-import requests # 1단계에서 requests를 추가했으므로 이제 에러가 안 납니다.
+# import requests  <-- 이 줄이 빌드 실패의 주범이었습니다. 삭제했습니다.
 
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.request_handlers import DefaultRequestHandler
 from a2a.server.tasks import InMemoryTaskStore
 from a2a.types import AgentCapabilities, AgentCard, AgentSkill
-# 2단계에서 agent_executor.py를 만들었으므로 이제 에러가 안 납니다.
-from agent_executor import HelloMCPAgentExecutor 
+from agent_executor import HelloMCPAgentExecutor
 
 # ★ 중요: 날씨 전문가는 '666155' (옛날 서버) 주소를 씁니다.
 MCP_SERVER_URL = os.environ.get(
