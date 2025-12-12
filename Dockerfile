@@ -1,26 +1,21 @@
-# MCP Hello Server - Docker 이미지 빌드 설정
-# 빌드: docker build -t mcp-hello-py .
-# stdio 실행: docker run -it mcp-hello-py
-# HTTP 실행: docker run -p 8890:8890 mcp-hello-py
-
-# Python 3.11 Slim 이미지 (경량화)
+# 가벼운 파이썬 버전 사용
 FROM python:3.11-slim
 
-# 작업 디렉토리 설정
+# 로그가 지연 없이 바로 찍히도록 설정 (에러 확인용)
+ENV PYTHONUNBUFFERED=True
+
+# 작업 폴더 설정
 WORKDIR /app
 
-# 의존성 설치 (캐싱 최적화)
+# 패키지 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 소스 코드 복사
 COPY . .
 
-# HTTP Stream 포트 노출
-EXPOSE 8080
-
-# 환경 변수 설정 (기본값)
-ENV PORT=8080
-
-# 서버 시작 (기본: HTTP Stream 모드)
-CMD ["python", "src/server.py", "--http-stream"]
+# [핵심 수정]
+# 1. 호스트를 무조건 0.0.0.0으로 엽니다 (localhost 아님)
+# 2. 포트를 8080으로 고정합니다.
+# 3. src 폴더 안의 server.py 파일의 app 객체를 실행합니다.
+CMD ["uvicorn", "src.server:app", "--host", "0.0.0.0", "--port", "8080"]
